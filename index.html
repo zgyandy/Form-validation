@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="./assets/css/index.css">
+	<title>表单验证</title>
+</head>
+
+<body>
+	<form action="f12">
+		<ol class="list">
+			<li>
+				<p>单选必选:</p>
+				<p>
+					<input keys="ra1" required type="radio" name="ra1">
+					<span>1</span>
+				</p>
+				<p>
+					<input keys="ra1" required type="radio" name="ra1">
+					<span>2</span>
+				</p>
+				<p>
+					<input keys="ra1" required type="radio" name="ra1">
+					<span>3</span>
+				</p>
+				<p>
+					<input keys="ra1" required type="radio" name="ra1">
+					<span>4</span>
+				</p>
+			</li>
+			<li>
+				<p>单选非必选:</p>
+				<p>
+					<input type="radio" keys="ra2" name="ra2">
+					<span>A</span>
+				</p>
+				<p>
+					<input type="radio" keys="ra2" name="ra2">
+					<span>B</span>
+				</p>
+				<p>
+					<input type="radio" keys="ra2" name="ra2">
+					<span>C</span>
+				</p>
+				<p>
+					<input type="radio" keys="ra2" name="ra2">
+					<span>D</span>
+				</p>
+			</li>
+			<li>
+				<p>输入框必填:</p>
+				<input maxlength="12" type="text" keys="inp1" required>
+			</li>
+			<li>
+				<p>输入框非必填:</p>
+				<input maxlength="12" type="text" keys="inp2">
+			</li>
+			<li>
+				<p>下拉框必填:</p>
+				<p>
+					<select required name="sel1" id="sel1" keys="“sel1">
+						<option value="0">全部</option>
+						<option value="1">选项一</option>
+					</select>
+				</p>
+				<p>
+					<select required name="sel2" id="sel2" keys="“sel2">
+						<option value="0">全部</option>
+						<option value="1">选项一</option>
+					</select>
+				</p>
+			</li>
+			<li>
+				<p>下拉框非必填:</p>
+				<p>
+					<select name="sel3" id="sel3" keys="“sel3">
+						<option value="0">全部</option>
+						<option value="1">选项一</option>
+					</select>
+				</p>
+				<p>
+					<select name="sel4" id="sel4" keys="“sel4">
+						<option value="0">全部</option>
+						<option value="1">选项一</option>
+					</select>
+				</p>
+			</li>
+			<li>
+				<p>多选框必选:</p>
+				<p>
+					<input type="checkbox" name="che1">
+					<span>A</span>
+				</p>
+				<p>
+					<input type="checkbox" name="che1" required>
+					<span>B</span>
+				</p>
+				<p>
+					<input type="checkbox" name="che1">
+					<span>C</span>
+				</p>
+				<p>
+					<input type="checkbox" name="che1">
+					<span>D</span>
+				</p>
+				<p>
+					<input type="checkbox" name="che1">
+					<span>E</span>
+				</p>
+			</li>
+			<li>
+				<p>多选框非必选:</p>
+				<p>
+					<input type="checkbox" name="che1">
+					<span>A</span>
+				</p>
+				<p>
+					<input type="checkbox" name="che1">
+					<span>B</span>
+				</p>
+				<p>
+					<input type="checkbox" name="che1">
+					<span>C</span>
+				</p>
+				<p>
+					<input type="checkbox" name="che1">
+					<span>D</span>
+				</p>
+				<p>
+					<input type="checkbox" name="che1">
+					<span>E</span>
+				</p>
+			</li>
+			<li>
+				<p>多行文本框必填:</p> 
+				<textarea maxlength="150" name="tex1" id="tex1" cols="30" keys="area1" rows="10" required></textarea>
+			</li>
+			<li>
+				<p>多行文本非必填:</p>
+				<textarea maxlength="150" name="tex2" id="tex2" cols="30" keys="area2" rows="10"></textarea>
+			</li>
+			<li>
+				<button type="submit">表单提交</button>
+			</li>
+			<li>
+				<p class="btn">非表单提交</p>
+			</li>
+		</ol>
+	</form>
+	<script src="./assets/js/jqueryl.8.2.js"></script>
+	<script>
+		// 提交
+		$(".btn").on('click', function () {
+			requiredCheck()
+		})
+		// 必填校验 元素中keys为要提交数据对象的键值 dom 限定选择区间string  '.dom'
+		function requiredCheck(dom) {
+			if ($('p[value]').size() > 0) $('p[value]').remove()
+			dom = dom ? dom + ' ' : "";
+			var radObj = {}     // 单选name值对象
+			var retObj = {}     // 返回obj
+			var boxObj = {}			// 多选
+			var rad = true      // 单选
+			var box = true			// 多选	
+			var txt = true      // 文本框
+			var sel = true      // select
+			var txa = true      // 多行文本框
+			// 单选框 判断是否选择（无论是必选还是非必选） 未选择->判断 必选项、非必选项
+			$(dom + "input[keys][type=radio]").each(function () {
+				// 判断是否处于隐藏状态
+				if ($(this).is(":hidden")) return true;
+				// 判断是否选择
+				if (retObj[$(this).attr('keys')]) return true;
+				// 判断是否被选中
+				if ($(this).attr('checked')) {
+					// 删除选择的选项
+					$(this).attr('keys') in radObj && delete radObj[$(this).attr('keys')];
+					// 获取单选框checked 的value值
+					if ($(this).attr("keys")) {
+						retObj[$(this).attr('keys')] = $(this).val()
+					}
+				} else {
+					if ($(this).attr('required')) {
+						// 判断是否为必选项
+						radObj[$(this).attr('keys')] = ''
+					}
+					if ($(this).attr("keys")) {
+						retObj[$(this).attr('keys')] = ''
+					}
+				}
+			})
+			// 单选框必选未选择 选项遍历 提示用户选择
+			for (var key in radObj) {
+				$('input[keys=' + key + ']').each(function () {
+					// 判断是否为隐藏状态，隐藏状态下元素坐标为auto
+					if ($(this).is(":hidden")) return true;
+					warnToast('此项为必选项', parseInt($(this).parent().offset().left), parseInt($(this).parent().offset().top + $(this).parent().height() + 3), dom)
+					// 返回值
+					rad = false
+					return false;
+				})
+				// 选择时移除警告
+				$('input[keys=' + key + ']').on("click", function () {
+					// 移除警告
+					removeWarn(parseInt($(this).parent().offset().left), parseInt($(this).parent().offset().top + $(this).parent().height() + 3))
+					rad = true
+				})
+			}
+			// 多选框
+			$(dom + 'input[type=checkbox]').each(function () {
+				// 判断是否处于隐藏状态
+				if ($(this).is(":hidden")) return true;
+				if (!$(this).attr('keys') in retObj) retObj[$(this).attr('keys')] = [];
+				// 判断是否被选
+				if ($(this).attr('checked')) {
+					if ($(this).attr("keys")) {
+						retObj[$(this).attr('keys')].push($(this).val())
+					}
+				} else {
+					if ($(this).attr('required')) {
+						boxObj[$(this).attr('keys')] = $(this).attr('keys')
+					}
+				}
+			})
+			// 多选框必选项未选遍历
+			for (key in boxObj) {
+				$('input[keys=' + key + ']').each(function () {
+					// 返回值
+					box = false
+					warnToast('此项为必选项', parseInt($(this).parent().offset().left), parseInt($(this).parent().offset().top + $(this).parent().height() + 3), dom)
+					return false;
+				})
+				// 选择时移除警告
+				$('input[keys=' + key + ']').on("click", function () {
+					// 移除警告
+					removeWarn(parseInt($(this).parent().offset().left), parseInt($(this).parent().offset().top + $(this).parent().height() + 3))
+					box = true
+				})
+			}
+			// 单行文本框 是否有值（值是否需要校验，）
+			$(dom + "input[type=text]").each(function () {
+				// 判断是否处于隐藏状态
+				if ($(this).is(":hidden")) return true;
+				// 判断是否有值 
+				if ($(this).val()) {
+					// 校验 为假时 警告 txt = false 终止循环return false
+					removeWarn(parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3))
+					// 手机号
+					if ($(this).attr('phone') && !phoneFn($(this).val())) {
+						txt = false
+						warnToast('请输入11位手机号', parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3), dom)
+						return false;
+					}
+					// 数字
+					if ($(this).attr('num') && !numVerify()) {
+						warnToast('请填写正确的数值', parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3), dom)
+						txt = false
+						return false;
+					}
+					// 身份证号
+					if ($(this).attr('idcard') && !idcardCheck()) {
+						warnToast('请输入正确的18位身份证号', parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3), dom)
+						txt = false
+						return false;
+					}
+					txt = true
+				} else {
+					// 判断是否为必填项
+					if ($(this).attr('required')) {
+						warnToast('此项为必填项', parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3), dom)
+						txt = false
+						return false; // 终止循环
+					} else {
+						removeWarn(parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3))
+					}
+				}
+				// 返回值中添加
+				if ($(this).attr("keys")) {
+					retObj[$(this).attr("keys")] = $(this).val()
+				}
+			})
+			// select  必填状态 
+			$(dom + "select[keys]").each(function () {
+				// 判断是否处于隐藏状态
+				if ($(this).is(":hidden")) return true;
+				if ($(this).attr("required") && $(this).children("option:selected").val() <= 0) {
+					sel = false
+					warnToast('此项为必选项', parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3), dom)
+					return false;
+				}
+				removeWarn(parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3))
+				if ($(this).attr("keys")) {
+					retObj[$(this).attr("keys")] = $(this).children("option:selected").val()
+				}
+			})
+			// 多行文本框
+			$(dom + 'textarea[keys]').each(function () {
+				// 判断是否处于隐藏状态
+				if ($(this).is(":hidden")) return true;
+				// 判断是否有值 
+				if ($(this).val()) {
+					// 校验 为假时 警告 txa = false 终止循环return false 为真时不做处理
+					txa = true
+				} else {
+					// 判断是否为必填项
+					if ($(this).attr('required')) {
+						warnToast('此项为必填项', parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3), dom)
+						txa = false
+						return false;
+					}
+				}
+				// 返回值中添加
+				if ($(this).attr("keys")) {
+					retObj[$(this).attr("keys")] = $(this).val()
+				}
+			})
+			// 最终返回值
+			if (rad && txt && sel && txa && box) {
+				// 移除所有警告
+				if ($('p[value]').size() > 0) $('p[value]').remove()
+				// 返回数据对象
+				return retObj
+			} else {
+				return rad && txt && sel && txa && box
+			}
+		}
+		// 警告提示 text 提示信息 left 左侧距离 top 顶部距离 dom 警告相对相对定位的父级元素要添加到的元素
+		function warnToast(text, left, top, dom) {
+			if (!$(".sightcing").size() > 0) {
+				if (dom) {
+					$('<div class="sightcing"></div>').css({ position: 'relative', width: "120px", margin: '0 auto' }).appendTo($(dom))
+				} else {
+					$('<div class="sightcing"></div>').css({ position: 'relative', width: "120px", margin: '0 auto' }).appendTo($('body'))
+				}
+			}
+			text = text || "错误"
+			var str = left.toString() + top.toString()
+			var le = parseInt($('.sightcing').offset().left)
+			var tp = parseInt($('.sightcing').offset().top)
+			//  判断是否有警告标签        
+			if ($('p[value=' + str + ']').size() > 0) {
+				return;
+			}
+			$('<p class="red" style="min-width: 200px" value="' + str + '">' + text + '</p>').css({ position: "absolute", left: left - $('.sightcing').offset().left, top: top - $('.sightcing').offset().top }).appendTo($('.sightcing'))
+		}
+		// 移除警告 left 左侧距离 top 顶部距离
+		function removeWarn(left, top) {
+			var stri = left.toString() + top.toString()
+			//  判断是否有警告标签
+			if ($('p[value=' + stri + ']').html()) {
+				$('p[value=' + stri + ']').remove()
+			}
+		}
+		// 手机号验证 input 输入框中添加 phone 属性 <input type="text" phone>
+		function phoneVerify() {
+			var val = ''
+			// 输入判断
+			$('input[phone]').on('input', function () {
+				val = $(this).val()
+				if (!val.match(/^1\d{0,10}$/)) {
+					warnToast('手机号输入错误', parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3))
+				} else {
+					$('p[value=' + parseInt($(this).offset().left).toString() + parseInt($(this).offset().top + $(this).height() + 3).toString() + ']').remove()
+				}
+			})
+			// 失去焦点判断
+			$('input[phone]').on('blur', function () {
+				val = $(this).val()
+				// 判断val是否有值
+				if (val) {
+					if (!val.match(/^1\d{10}$/)) {
+						warnToast('请输入11位手机号', parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3))
+					} else {
+						removeWarn(parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3))
+					}
+				} else {
+					// 判断是否为必填
+					if ($(this).attr('required')) {
+						warnToast('请输入11位手机号', parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3))
+					} else {
+						removeWarn(parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3))
+					}
+				}
+			})
+		}
+		// 11为手机号判断
+		function phoneFn(val) {
+			var last = false
+			if (!val.match(/^1\d{10}$/)) {
+				last = false
+			} else {
+				last = true
+			}
+			return last
+		}
+		// 身份证号校验
+		function idcardCheck() {
+			var card = false
+			$("input[idcard]").on('input', function () {
+				if ($(this).val().match(/^\d{0,17}(\d|[xX])$/)) {
+					// 移除警告			
+					removeWarn(parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3))
+				} else {
+					// 添加警告
+					warnToast('请输入正确的18位身份证号', parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3))
+				}
+			})
+			$("input[idcard]").on('blur', function () {
+				if ($(this).val().match(/^\d{17}(\d|[xX])$/)) {
+					removeWarn(parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3))
+				} else {
+					warnToast('请输入正确的18位身份证号', parseInt($(this).offset().left), parseInt($(this).offset().top + $(this).height() + 3))
+				}
+			})
+			// 校验
+			$("input[idcard]").each(function () {
+				if ($(this).val().match(/^\d{17}(\d|[xX])$/)) {
+					card = true
+				} else {
+					card = false
+				}
+			})
+			return card;
+		}
+	</script>
+</body>
+
+</html>

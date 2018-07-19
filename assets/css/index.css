@@ -1,0 +1,142 @@
+@charset "utf-8";
+body,div,ol,ul,li,img,p,h1,h2,h3,h4,h5,h6,table,td,tr,thead,tbody,dl,dd,dt,select,option,input {
+  margin: 0;
+  padding: 0;
+}
+input[type='submit'] {
+	border: none;
+}
+input[type="radio"], input[type="checkbox"] {
+	margin-right: 5px;
+	vertical-align: middle;
+}
+body,html {
+  font-family: 'Microsoft Yahei';
+  font-size: 16px;
+  background: #f6f7fb;
+  width: 100%;
+  height: 100%;
+}
+a {
+	text-decoration: none;
+	cursor: pointer;
+}
+ul,ol,li {
+  list-style: none;
+}
+img {
+  border: none;
+  vertical-align: middle;
+}
+select {
+	height:34px;
+	-webkit-appearance:none;
+	-moz-appearance:none;
+	appearance:none;	
+	background:url('../img/select_bgs.png') no-repeat right #fff;
+	cursor:pointer;
+	border: solid 1px #dddddd;
+	border-radius:4px;
+	font-size: 14px;
+	color:#0c111b;
+	text-indent: 0.5em;
+	outline: none;
+	overflow: hidden;
+	padding-right: 30px;
+}
+table{
+	width: 1179px;
+	margin:0 auto;
+	border-right: 1px #ddd solid;
+	border-top: 1px #ddd solid;
+	table-layout: fixed;
+}
+td[title] {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+tr:nth-child(2n){
+	background:#f7f6fb;
+}
+td,th{
+	border-bottom: 1px #ddd solid;
+	border-left: 1px #ddd solid;
+	text-align: center;
+    word-break:break-all;
+    word-wrap:break-word; 
+    vertical-align:middle;
+    overflow: hidden;
+    height: 57px;
+    font-size: 14px;
+}
+td a,th a{
+	display: block;
+}
+td span,th span{
+	cursor: pointer;
+}
+th{
+	background: #e1e4e6;
+	font-weight: 100;
+}
+input::-ms-reveal {
+	display:none;
+}
+input::-webkit-input-placeholder {
+	font-size: 14px;
+	color: #0c111b;
+}
+input:-ms-input-placeholder {
+	font-size: 14px;
+	color: #0c111b;
+}
+input:-moz-placeholder {
+	font-size: 14px;
+	color: #0c111b;
+}
+input,textarea {
+	border:solid 1px #eaeaec;
+	font-size:14px;
+	border-radius:2px;
+	resize:none;
+	outline: none;
+	text-indent: 1em;
+}
+em {font-style:normal;}
+.red {
+	color: red;
+	font-size: 12px;
+}
+.blue {
+	color: #428adf;
+}
+.list {
+  width: 700px;
+  margin: 0 auto;
+}
+.list li {
+  min-height: 36px;
+  line-height: 36px;
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.list li p {
+	min-width: 120px;
+}
+select {
+  width: 120px;
+}
+input[type='text'] {
+  height: 34px;
+  width: 160px;
+}
+button {
+	font-size: 16px;
+	cursor: pointer;
+}
+.btn {
+	cursor: pointer;
+}
